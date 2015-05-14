@@ -25,11 +25,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ApiController.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ApiController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/ApiController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.509091" vertical-offset="4905" max-vertical-offset="7032">
-              <caret line="217" column="32" selection-start-line="217" selection-start-column="32" selection-end-line="217" selection-end-column="32" />
+            <state vertical-scroll-proportion="0.47716534" vertical-offset="945" max-vertical-offset="7032">
+              <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
               <folding>
                 <element signature="e#38#78#0#PHP" expanded="true" />
               </folding>
@@ -37,11 +37,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserRepository.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="UserRepository.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/Api/UserRepository.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.30873495" vertical-offset="6923" max-vertical-offset="9774">
-              <caret line="264" column="11" selection-start-line="264" selection-start-column="11" selection-end-line="264" selection-end-column="11" />
+            <state vertical-scroll-proportion="-13.653846" vertical-offset="1301" max-vertical-offset="8688">
+              <caret line="69" column="50" selection-start-line="69" selection-start-column="50" selection-end-line="69" selection-end-column="50" />
               <folding>
                 <element signature="e#40#79#0#PHP" expanded="true" />
               </folding>
@@ -89,8 +89,8 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Entity/Api/User.php" />
         <option value="$PROJECT_DIR$/web/config.php" />
         <option value="$PROJECT_DIR$/web/app_dev.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Controller/ApiController.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Entity/Api/UserRepository.php" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Controller/ApiController.php" />
       </list>
     </option>
   </component>
@@ -603,22 +603,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/ApiController.php">
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/Api/UserRepository.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.509091" vertical-offset="4905" max-vertical-offset="7032">
-          <caret line="217" column="32" selection-start-line="217" selection-start-column="32" selection-end-line="217" selection-end-column="32" />
+        <state vertical-scroll-proportion="-13.653846" vertical-offset="1301" max-vertical-offset="8688">
+          <caret line="69" column="50" selection-start-line="69" selection-start-column="50" selection-end-line="69" selection-end-column="50" />
           <folding>
-            <element signature="e#38#78#0#PHP" expanded="true" />
+            <element signature="e#40#79#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/Api/UserRepository.php">
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/ApiController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.30873495" vertical-offset="6923" max-vertical-offset="9774">
-          <caret line="264" column="11" selection-start-line="264" selection-start-column="11" selection-end-line="264" selection-end-column="11" />
+        <state vertical-scroll-proportion="0.47716534" vertical-offset="945" max-vertical-offset="7032">
+          <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
           <folding>
-            <element signature="e#40#79#0#PHP" expanded="true" />
+            <element signature="e#38#78#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>

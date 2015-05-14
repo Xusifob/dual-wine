@@ -64,16 +64,16 @@ class UserRepository extends EntityRepository
 
                     $em->flush();
 
-                    return true;
+                    return ['inscription' => true];
 
                 } else {
-                    return false;
+                    return ['inscription' => false];
                 }
             } else {
-                return false;
+                return ['inscription' => false];
             }
         }else{
-            return false;
+            return ['inscription' => false];
         }
     }
 

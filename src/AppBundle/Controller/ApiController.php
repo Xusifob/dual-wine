@@ -49,10 +49,10 @@ class APIController extends Controller
         /** @var UserRepository $repo */
         $repo = $em->getRepository('AppBundle:Api\User');
         $inscription = $repo->RegisterUser($email,$username,$password);
-        $return = ['inscription' => $inscription];
+
         /************ RETOUR DES DONNEES *********************/
         // Je crée ma valeur de retour
-        $jsonResponse = new JsonResponse($return);
+        $jsonResponse = new JsonResponse($inscription);
         // Je set les headers pour pouvoir utiliser les données en ajax
         $jsonResponse->headers->set("Access-Control-Allow-Origin", "*");
         $jsonResponse->headers->set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
