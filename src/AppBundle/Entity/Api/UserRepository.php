@@ -2,7 +2,7 @@
 
 namespace AppBundle\Entity\Api;
 
-use AppBundle\Controller\APIController;
+use AppBundle\Controller\ApiController;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr as Expr;
 use Doctrine\ORM\AbstractQuery;
