@@ -115,4 +115,243 @@ class UserRepository extends EntityRepository
         }
     }
 
+    public function ForgetPassword($email){
+        if( !empty($email)) {
+            $em =$this->getEntityManager();
+            /**
+             * @var $user User
+             */
+            $user = $this->findOneBy(['email'=>$email]);
+
+            //envoyer un mail à l'adresse entré avec le nouveau mdp
+            if ($user != null){
+                $newpassword = $user->createPassword();
+                $user->setPassword(crypt($newpassword));
+                $em->persist($user);
+                $em->flush();
+                $ok = $user->sendNewPassword($newpassword);
+                if($ok) {
+                    return ['email' => true];
+                }
+                else{
+                    return ['email' => false];
+                }
+            } else {
+                return ['email' => false];
+            }
+        } else {
+            return ['email' => false];
+        }
+    }
+
+    public function UserProfil($token){
+        if(!empty($token)){
+
+            /**
+             * @var $user User
+             */
+            $user = $this->findOneBy(['token'=>$token]);
+
+            $classement = $this->getClassement($user);
+
+            if($user != null){
+                return [
+                    'score'=>$user->getScore(),
+                    'classement' => $classement +1,
+                ];
+            } else{
+                return ['token'=>false];
+            }
+        }else{
+            return ['token'=>false];
+        }
+    }
+
+
+    public function UserUpdate($token,$oldpasword,$newpassword)
+    {
+        if (!empty($token) && !empty($oldpasword) && !empty($newpassword)) {
+            $em = $this->getEntityManager();
+
+            /**
+             * @var $profil User
+             */
+            $profil = $this->findOneBy(['token' => $token]);
+            if ($profil != null) {
+                if ($profil->verifyPassword($oldpasword)) {
+                    $profil->setPassword(crypt($newpassword));
+                    $em->persist($profil);
+                    $em->flush();
+
+                    return [
+                        'update' => true
+                    ];
+                } else {
+                    return [
+                        'password' => $profil->getPassword(),
+                        'update' => false
+                    ];
+                }
+            } else {
+                return [
+                    'update' => false
+                ];
+            }
+        } else {
+            return ['update' => false];
+        }
+    }
+
+
+
+    public function UserClassement($token){
+        if(!empty($token)){
+            $em=$this->getEntityManager();
+
+            /**
+             * @var $user User
+             */
+            $user = $this->findOneBy(['token'=>$token]);
+            if($user) {
+                $qb = $this->createQueryBuilder('u');
+                $qb->select('u.score', 'u.pseudo')
+                    ->orderBy('u.score', 'DESC')
+                    ->setMaxResults(10);
+                $classements = $qb->getQuery()->getArrayResult();
+
+                $classement = $this->getClassement($user);
+
+                return  ['firsts' => $classements, 'me' => $classement +1];
+
+            }else{
+                return ['token' => false];
+            }
+        }else{
+            return ['token'=>false];
+        }
+
+    }
+
+    /**
+     * @param User $user
+     * @return int
+     */
+    public function getClassement($user)
+    {
+        $qb = $this->createQueryBuilder('u');
+        $qb->select('u.id','u.score')
+            ->orderBy('u.score', 'DESC')
+            ->where('u.score < :score')
+            ->setParameters([
+                ':score' => $user->getScore(),
+            ]);
+        return count($qb->getQuery()->getArrayResult());
+    }
+
+
+
+
+
+    public function DeleteFriend($token,$amis){
+        if(!empty($token)&& !empty($amis)){
+        $em = $this->getEntityManager();
+            /**
+             * @var $user User
+             */
+            $user = $this->findOneBy(['token' => $token]);
+
+            $amis = $this->find($amis);
+
+            if($amis != null && $user != null){
+                $user->removeFriend($amis);
+                $em->persist($user);
+                $em->flush();
+
+                return ['delete' => true];
+
+            }else{
+                return ['delete' => false];
+            }
+        }else{
+            return ['delete' => false];
+        }
+    }
+
+    public function GetFriends($token)
+    {
+        if(!empty($token)){
+            $em = $this->getEntityManager();
+
+            /**
+             * @var $user User
+             */
+            $qb = $this->createQueryBuilder('u');
+            $qb->select('u,a')
+                ->leftJoin('u.amis','a', Expr\Join::WITH)
+                ->orderBy('u.id', 'DESC')
+                ->where('u.token = :token')
+                ->setParameters([
+                    ':token' => $token,
+                ])
+            ;
+            $user = $qb->getQuery()->getSingleResult(AbstractQuery::HYDRATE_ARRAY);
+
+            if($user != null) {
+
+                return [
+                    'friend' => $user['amis'],
+                ];
+            }else{
+                return ['friend' => false];
+            }
+        }
+        else{
+            return ['friend' => false];
+        }
+    }
+
+
+
+    public function FindFriend($token,$username){
+        if(!empty($token)&& !empty($username)){
+            $em=$this->getEntityManager();
+
+            /**
+             * @var $user User
+             */
+            $user = $this->findOneBy(['token'=>$token]);
+
+
+
+            $friend = $this->findOneBy(['pseudo' => $username]);
+
+
+            if($user != null && $friend != null) {
+                $user->addFriend($friend);
+                $em->persist($user);
+                $em->flush();
+                return [
+                    'friend' => true,
+                ];
+            }else{
+                return ['friend' => false];
+            }
+        }
+        /*
+        Données récupérés :
+        token
+        id
+        pseudo
+
+        Traitement :
+        Récupère le pseudo envoyé par l’utilisateur et cherche qqn avec un pseudo semblable dans la base
+        S’il y a qqn avec le même pseudo, l’ajouter en ami
+
+        Données renvoyés :
+            Si l’ami est trouvé:
+        friend(true)
+            Si l’ami n’est pas trouvé:
+        friend(false)*/
+    }
+
 }

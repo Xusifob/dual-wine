@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity\Api;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,18 +51,27 @@ class User
     private $token;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="score", type="integer", nullable=true)
+     * @ORM\Column(name="score", type="string", length=255, nullable=true)
      */
     private $score;
 
     /**
-     * @var User
+     * @var ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="User")
      */
     private $amis;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->amis = new ArrayCollection();
+    }
 
 
     /**
@@ -90,7 +100,7 @@ class User
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -113,7 +123,7 @@ class User
     /**
      * Get pseudo
      *
-     * @return string 
+     * @return string
      */
     public function getPseudo()
     {
@@ -136,35 +146,14 @@ class User
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
         return $this->password;
     }
 
-    /**
-     * Set amis
-     *
-     * @param string $amis
-     * @return User
-     */
-    public function setAmis($amis)
-    {
-        $this->amis = $amis;
 
-        return $this;
-    }
-
-    /**
-     * Get amis
-     *
-     * @return string 
-     */
-    public function getAmis()
-    {
-        return $this->amis;
-    }
 
     /**
      * Set token
@@ -182,7 +171,7 @@ class User
     /**
      * Get token
      *
-     * @return string 
+     * @return string
      */
     public function getToken()
     {
@@ -205,11 +194,42 @@ class User
     /**
      * Get score
      *
-     * @return integer 
+     * @return integer
      */
     public function getScore()
     {
         return $this->score;
+    }
+
+    /**
+     * @param User $friend
+     * @return $this
+     */
+    public function addFriend(User $friend)
+    {
+        $this->amis[] = $friend;
+
+        return $this;
+    }
+
+    /**
+     * Remove friend
+     *
+     * @param User $friend
+     */
+    public function removeFriend(User $friend)
+    {
+        $this->amis->removeElement($friend);
+    }
+
+    /**
+     * Get amis
+     *
+     * @return ArrayCollection
+     */
+    public function getAmis()
+    {
+        return $this->amis;
     }
 
     /**
@@ -221,12 +241,23 @@ class User
     public function createToken($size = 20)
     {
         $string = "";
-        $chaine = "0123456789";	// J'associe tous les caractères que je veux mettre dans mon id
+        $chaine = "012345azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN6789";	// J'associe tous les caractères que je veux mettre dans mon id
         srand((double)microtime()*time());
         for($i=0; $i<$size; $i++) {		// J'affiche le bon nombre de caractères.
             $string .= $chaine[rand()%strlen($chaine)];
         }
-        return (int)$string;
+        return $string;
+    }
+
+    public function createPassword($size = 8)
+    {
+        $string = "";
+        $mdp = "012345azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN6789";	// J'associe tous les caractères que je veux mettre dans mon id
+        srand((double)microtime()*time());
+        for($i=0; $i<$size; $i++) {		// J'affiche le bon nombre de caractères.
+            $string .= $mdp[rand()%strlen($mdp)];
+        }
+        return $string;
     }
 
     /**
@@ -238,5 +269,17 @@ class User
     public function verifyPassword($password)
     {
         return password_verify($password,$this->password);
+    }
+
+    public  function sendNewPassword($newPassword){
+
+        //TODO Envoyer un mail un peu plus beau cf :http://openclassrooms.com/courses/e-mail-envoyer-un-e-mail-en-php
+        return mail($this->email,"mot de passe oublié",$newPassword);
+    }
+
+
+    public function verifyToken($token)
+    {
+        return token_verify($token,$this->token);
     }
 }
