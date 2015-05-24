@@ -482,13 +482,17 @@ class ApiController extends Controller
      */
     public function createCat()
     {
-        $cat = new Categorie();
-        $cat->setNom('Culture générale');
-        $em = $this->getDoctrine()->getEntityManager();
-        $em->persist($cat);
-        $em->flush();
 
-        return new JsonResponse($cat->getNom());
+        $cats = ['Culture générale','Histoire','Géographie','Vocabulaire','Oenologie'];
+        foreach($cats as $ct) {
+            $cat = new Categorie();
+            $cat->setNom($ct);
+            $em = $this->getDoctrine()->getEntityManager();
+            $em->persist($cat);
+            $em->flush();
+        }
+
+        return new JsonResponse($cats);
     }
 
     /**
@@ -500,17 +504,51 @@ class ApiController extends Controller
 
         $catRepo = $em->getRepository('AppBundle:Api\Categorie');
 
-        $cat = $catRepo->findOneBy(['nom' => 'Géographie du vin']);
+        $cat = $catRepo->findOneBy(['nom' => 'Géographie']);
 
-        $question = new Question();
-        $question->setNom('Quel pays est le plus gros exportateur de vin aujourd\'hui ?')
-            ->setCategorie($cat)
-            ->setFaux1('Italie')
-            ->setFaux2('Espagne')
-            ->setFaux3('Chine')
-            ->setVrai('France');
-        $em->persist($question);
-        $em->flush();
+        $qsts = [
+            [
+                'nom' => 'Quel pays est le plus gros exportateur de vin aujourd\'hui ?',
+                'vrai' => 'France',
+                'faux1' => "Italie",
+                'Faux2' => 'Espagne',
+                'Faux3' => 'Chine',
+            ],
+
+            [
+                'nom' => 'Quel pays est le plus gros consommateur de vin aujourd\'hui ?',
+                'vrai' => 'Vatican',
+                'faux1' => "France",
+                'Faux2' => 'Etats Unis',
+                'Faux3' => 'Chine',
+            ],
+            [
+                'nom' => 'Quelle est la région qui produit le plus de vin en France?',
+                'vrai' => 'Aquitaine',
+                'faux1' => "Champagne",
+                'Faux2' => 'Côte du Rhône',
+                'Faux3' => 'Bourgogne',
+            ],
+            [
+                'nom' => 'De quelle région vient le St Emilion ? ',
+                'vrai' => 'Bordeaux ',
+                'faux1' => "Champagne",
+                'Faux2' => 'Côte du Rhône',
+                'Faux3' => 'Bourgogne',
+            ],
+        ];
+
+        foreach($qsts as $qst) {
+            $question = new Question();
+            $question->setNom($qsts['nom'])
+                ->setCategorie($cat)
+                ->setFaux1($qsts['faux1'])
+                ->setFaux2($qsts['Faux2'])
+                ->setFaux3($qsts['Faux3'])
+                ->setVrai($qsts['vrai']);
+            $em->persist($question);
+            $em->flush();
+        }
 
         return new JsonResponse($question->getNom());
     }
