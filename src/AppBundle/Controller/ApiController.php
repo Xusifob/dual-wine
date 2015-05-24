@@ -540,17 +540,17 @@ class ApiController extends Controller
 
         foreach($qsts as $qst) {
             $question = new Question();
-            $question->setNom($qsts['nom'])
+            $question->setNom($qst['nom'])
                 ->setCategorie($cat)
-                ->setFaux1($qsts['faux1'])
-                ->setFaux2($qsts['Faux2'])
-                ->setFaux3($qsts['Faux3'])
-                ->setVrai($qsts['vrai']);
+                ->setFaux1($qst['faux1'])
+                ->setFaux2($qst['Faux2'])
+                ->setFaux3($qst['Faux3'])
+                ->setVrai($qst['vrai']);
             $em->persist($question);
             $em->flush();
         }
 
-        return new JsonResponse($question->getNom());
+        return new JsonResponse($qsts);
     }
 
 
