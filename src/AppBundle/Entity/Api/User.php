@@ -271,15 +271,56 @@ class User
         return password_verify($password,$this->password);
     }
 
-    public  function sendNewPassword($newPassword){
+    /**
+     * @param $newPassword
+     * @return bool
+     */
+    public function sendNewPassword($newPassword){
 
         //TODO Envoyer un mail un peu plus beau cf :http://openclassrooms.com/courses/e-mail-envoyer-un-e-mail-en-php
         return mail($this->email,"mot de passe oublié",$newPassword);
     }
 
-
-    public function verifyToken($token)
+    public function UpdateScore()
     {
-        return token_verify($token,$this->token);
+
+    }
+
+
+    public function AlgorithmeElo($ScoreJ1,$ScoreJ2,$nbpartieJ1,$nbPartieJ2,$W1,$W2){
+
+        // Coefficient K
+        $K1 = $this->CalculK($nbpartieJ1);
+        $K2 = $this->CalculK($nbPartieJ2);
+
+        $D1 = $ScoreJ1 - $ScoreJ2;
+
+        // Calcul des probabilités
+        $pD1 = 1/(1+10^(-$D1/400));
+        $pD2 = 1- $pD1;
+
+        // Calcul des scores
+        $ScoreJ1 = $ScoreJ1 + $K1*($W1 - $pD1 );
+        $ScoreJ2 = $ScoreJ2 + $K2*($W2 - $pD2 );
+
+        return [
+            'ScoreJ1' => $ScoreJ1,
+            'ScoreJ2' => $ScoreJ2
+        ];
+    }
+
+
+    function CalculK($nbPartie){
+        $K = 0;
+        if($nbPartie<15) {
+            $K = 40;
+        }else if($nbPartie<30){
+            $K = 30;
+        }else if($nbPartie<40){
+            $K = 20;
+        }else{
+            $K = 10;
+        }
+        return $K;
     }
 }

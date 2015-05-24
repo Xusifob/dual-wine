@@ -1,9 +1,14 @@
 <?php
 namespace AppBundle\Controller;
+use AppBundle\Entity\Api\Categorie;
+use AppBundle\Entity\Api\Question;
+use AppBundle\Entity\Api\Tour;
+use AppBundle\Entity\Api\User;
 use AppBundle\Entity\Api\UserRepository;
 use AppBundle\Entity\Api\CategorieRepository;
 use AppBundle\Entity\Api\QuestionRepository;
 use AppBundle\Entity\Api\PartieRepository;
+use AppBundle\Entity\Api\TourRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -283,6 +288,232 @@ class ApiController extends Controller
         return $jsonResponse;
     }
 
+    /**
+     * @Route("/connect/newpartie", name="api_new_partie")
+     */
+    public function userNewPartie()
+    {
+        /************ RECUPERATION DES DONNEES ******************/
+        //Je récupère la valeur de la requête
+        $request = $this->get('request');
+        //Je recupere les données envoyées en ajax
+        $token = $request->get('token');
+        $id = $request->get('id');
+        /************** TRAITEMENT DES DONNEES ****************/
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('AppBundle:Api\User');
+        /** @var UserRepository $repo */
+        $start = $repo->NewGame($token,$id);
+        /************ RETOUR DES DONNEES *********************/
+        $jsonResponse = new JsonResponse($start);
+        // Je set les headers pour pouvoir utiliser les données en ajax
+        $jsonResponse->headers->set("Access-Control-Allow-Origin", "*");
+        $jsonResponse->headers->set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        $jsonResponse->headers->set('Access-Control-Allow-Headers', 'origin, content-type, accept');
+        // Je renvoie la réponse
+        return $jsonResponse;
+    }
+
+    /**
+     * @Route("/connect/acceptpartie", name="api_accept_partie")
+     */
+    public function userAcceptPartie()
+    {
+        /************ RECUPERATION DES DONNEES ******************/
+        //Je récupère la valeur de la requête
+        $request = $this->get('request');
+        //Je recupere les données envoyées en ajax
+        $token = $request->get('token');
+        /************** TRAITEMENT DES DONNEES ****************/
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('AppBundle:Api\User');
+        /** @var UserRepository $repo */
+        $start = $repo->AcceptGame($token,$id_partie=null);
+        /************ RETOUR DES DONNEES *********************/
+        $jsonResponse = new JsonResponse($start);
+        // Je set les headers pour pouvoir utiliser les données en ajax
+        $jsonResponse->headers->set("Access-Control-Allow-Origin", "*");
+        $jsonResponse->headers->set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        $jsonResponse->headers->set('Access-Control-Allow-Headers', 'origin, content-type, accept');
+        // Je renvoie la réponse
+        return $jsonResponse;
+
+    }
+
+    /**
+     * @Route("/connect/refusePartie", name="api_refuse_partie")
+     */
+    public function userRefusePartie()
+    {
+        /************ RECUPERATION DES DONNEES ******************/
+        //Je récupère la valeur de la requête
+        $request = $this->get('request');
+        //Je recupere les données envoyées en ajax
+        $token = $request->get('token');
+
+        $id = $request->get('id');
+        /************** TRAITEMENT DES DONNEES ****************/
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('AppBundle:Api\User');
+        /** @var UserRepository $repo */
+        $start = $repo->RefuseGame($token,$id);
+        /************ RETOUR DES DONNEES *********************/
+        $jsonResponse = new JsonResponse($start);
+        // Je set les headers pour pouvoir utiliser les données en ajax
+        $jsonResponse->headers->set("Access-Control-Allow-Origin", "*");
+        $jsonResponse->headers->set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        $jsonResponse->headers->set('Access-Control-Allow-Headers', 'origin, content-type, accept');
+        // Je renvoie la réponse
+        return $jsonResponse;
+
+    }
+
+    /**
+     * @Route("/connect/launchpartie", name="api_launch_partie")
+     */
+    public function userLaunchPartie()
+    {
+        /************ RECUPERATION DES DONNEES ******************/
+        //Je récupère la valeur de la requête
+        $request = $this->get('request');
+        //Je recupere les données envoyées en ajax
+        $token = $request->get('token');
+        $id_partie = $request->get('id');
+        /************** TRAITEMENT DES DONNEES ****************/
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('AppBundle:Api\User');
+        /** @var UserRepository $repo */
+        $start = $repo->LaunchGame($token,$id_partie);
+        /************ RETOUR DES DONNEES *********************/
+        $jsonResponse = new JsonResponse($start);
+        // Je set les headers pour pouvoir utiliser les données en ajax
+        $jsonResponse->headers->set("Access-Control-Allow-Origin", "*");
+        $jsonResponse->headers->set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        $jsonResponse->headers->set('Access-Control-Allow-Headers', 'origin, content-type, accept');
+        // Je renvoie la réponse
+        return $jsonResponse;
+
+    }
+
+    /**
+     * @Route("/connect/play", name="api_play")
+     */
+    public function Play()
+    {
+        /************ RECUPERATION DES DONNEES ******************/
+        //Je récupère la valeur de la requête
+        $request = $this->get('request');
+        //Je recupere les données envoyées en ajax
+        $token = $request->get('token');
+        $id_partie = $request->get('id_part');
+        $id_categorie = $request->get('id_cat');
+        /************** TRAITEMENT DES DONNEES ****************/
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('AppBundle:Api\User');
+        /** @var UserRepository $repo */
+        $start = $repo->PlayGame($token,$id_partie,$id_categorie);
+        /************ RETOUR DES DONNEES *********************/
+        $jsonResponse = new JsonResponse($start);
+        // Je set les headers pour pouvoir utiliser les données en ajax
+        $jsonResponse->headers->set("Access-Control-Allow-Origin", "*");
+        $jsonResponse->headers->set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        $jsonResponse->headers->set('Access-Control-Allow-Headers', 'origin, content-type, accept');
+        // Je renvoie la réponse
+        return $jsonResponse;
+
+    }
+
+    /**
+     * @Route("/connect/finishplay", name="api_finish_play")
+     */
+    public function userFinishPlay()
+    {
+        /************ RECUPERATION DES DONNEES ******************/
+        //Je récupère la valeur de la requête
+        $request = $this->get('request');
+        //Je recupere les données envoyées en ajax
+        $token = $request->get('token');
+        $id_partie = $request->get('id');
+        $scoreJoueur = $request->get('scoreJoueur');
+        /************** TRAITEMENT DES DONNEES ****************/
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('AppBundle:Api\User');
+        /** @var UserRepository $repo */
+        $start = $repo->FinishGame($token,$id_partie,$scoreJoueur);
+        /************ RETOUR DES DONNEES *********************/
+        $jsonResponse = new JsonResponse($start);
+        // Je set les headers pour pouvoir utiliser les données en ajax
+        $jsonResponse->headers->set("Access-Control-Allow-Origin", "*");
+        $jsonResponse->headers->set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        $jsonResponse->headers->set('Access-Control-Allow-Headers', 'origin, content-type, accept');
+        // Je renvoie la réponse
+        return $jsonResponse;
+
+    }
+
+    /**
+     * @Route("/connect/allpartie", name="api_all_partie")
+     */
+    public function userAllParties()
+    {
+        /************ RECUPERATION DES DONNEES ******************/
+        //Je récupère la valeur de la requête
+        $request = $this->get('request');
+        //Je recupere les données envoyées en ajax
+        $token = $request->get('token');
+        /************** TRAITEMENT DES DONNEES ****************/
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('AppBundle:Api\User');
+        /** @var UserRepository $repo */
+        $start = $repo->AllGame($token);
+        /************ RETOUR DES DONNEES *********************/
+        $jsonResponse = new JsonResponse($start);
+        // Je set les headers pour pouvoir utiliser les données en ajax
+        $jsonResponse->headers->set("Access-Control-Allow-Origin", "*");
+        $jsonResponse->headers->set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        $jsonResponse->headers->set('Access-Control-Allow-Headers', 'origin, content-type, accept');
+        // Je renvoie la réponse
+        return $jsonResponse;
+
+    }
+
+    /**
+     * @Route("/connect/cat", name="api_create_category")
+     */
+    public function createCat()
+    {
+        $cat = new Categorie();
+        $cat->setNom('Culture générale');
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($cat);
+        $em->flush();
+
+        return new JsonResponse($cat->getNom());
+    }
+
+    /**
+     * @Route("/connect/qst", name="api_create_qst")
+     */
+    public function createQst()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $catRepo = $em->getRepository('AppBundle:Api\Categorie');
+
+        $cat = $catRepo->findOneBy(['nom' => 'Géographie du vin']);
+
+        $question = new Question();
+        $question->setNom('Quel pays est le plus gros exportateur de vin aujourd\'hui ?')
+            ->setCategorie($cat)
+            ->setFaux1('Italie')
+            ->setFaux2('Espagne')
+            ->setFaux3('Chine')
+            ->setVrai('France');
+        $em->persist($question);
+        $em->flush();
+
+        return new JsonResponse($question->getNom());
+    }
 
 
 }

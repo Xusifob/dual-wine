@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity\Api;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,12 +36,76 @@ class Partie
      */
     private $score2;
 
+
+
     /**
-     * @var User
+     * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\Column(name="tourj1", type="integer")
      */
-    private $joueurs;
+    private $tourj1;
+
+
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="tourj2", type="integer")
+     */
+    private $tourj2;
+
+
+
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="User")
+     */
+    private $joueur;
+
+
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="firstplayer", type="integer")
+     */
+    private $firstPlayer;
+
+
+
+
+    /**
+     * @var int
+     *
+     * @ORM\ManyToMany(targetEntity="Tour")
+     */
+    private $tours;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="etat", type="integer")
+     */
+    private  $etat;
+    const ETAT_DEBUT = 0;
+    const ETAT_ENCOURS = 1;
+    const ETAT_FIN = 2;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->joueur = new ArrayCollection();
+        $this->tours = new ArrayCollection();
+    }
+
+
 
     /**
      * Get id
@@ -53,14 +118,14 @@ class Partie
     }
 
     /**
-     * Set joueurs
+     * Set firstPlayer
      *
-     * @param string $joueurs
+     * @param string $firstPlayer
      * @return Partie
      */
-    public function setJoueurs($joueurs)
+    public function setFirstPlayer($fisrtPlayer)
     {
-        $this->joueurs = $joueurs;
+        $this->firstPlayer = $fisrtPlayer;
 
         return $this;
     }
@@ -70,10 +135,11 @@ class Partie
      *
      * @return string
      */
-    public function getJoueurs()
+    public function getFirstPlayer()
     {
-        return $this->joueurs;
+        return $this->firstPlayer;
     }
+
 
     /**
      * Set score1
@@ -120,4 +186,148 @@ class Partie
     {
         return $this->score2;
     }
+
+    /**
+     * Set tourj1
+     *
+     * @param integer $tourj1
+     * @return Partie
+     */
+    public function setTourj1($tourj1)
+    {
+        $this->tourj1 = $tourj1;
+
+        return $this;
+    }
+
+    /**
+     * Get tourj1
+     *
+     * @return integer
+     */
+    public function getTourj1()
+    {
+        return $this->tourj1;
+    }
+
+    /**
+     * Set tourj2
+     *
+     * @param integer $tourj2
+     * @return Partie
+     */
+    public function setTourj2($tourj2)
+    {
+        $this->tourj2 = $tourj2;
+
+        return $this;
+    }
+
+    /**
+     * Get tourj2
+     *
+     * @return integer
+     */
+    public function getTourj2()
+    {
+        return $this->tourj2;
+    }
+
+    /**
+     * @param $etat
+     * @return string
+     */
+    public function setEtat($etat){
+        $this->etat = $etat;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEtat()
+    {
+        return $this->etat;
+    }
+
+
+
+    /**
+     * @param User $joueur
+     * @return $this
+     */
+    public function addJoueur(User $joueur)
+    {
+        $this->joueur[] = $joueur;
+
+        return $this;
+    }
+
+    /**
+     * Remove joueur
+     *
+     * @param User $joueur
+     */
+    public function removeJoueur(User $joueur)
+    {
+        $this->joueur->removeElement($joueur);
+    }
+
+
+    /**
+     * @param Tour $tours
+     * @return $this
+     */
+    public function addTour(Tour $tours)
+    {
+        $this->tours[] = $tours;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getJoueur()
+    {
+        return $this->joueur;
+    }
+
+    /**
+     * @param ArrayCollection $joueur
+     */
+    public function setJoueur($joueur)
+    {
+        $this->joueur = $joueur;
+    }
+
+
+
+    /**
+     * Remove joueur
+     *
+     * @internal param User $joueur
+     */
+    public function removeTour(Tour $tour)
+    {
+        $this->tours->removeElement($tour);
+    }
+
+    /**
+     * @return int
+     */
+    public function getTours()
+    {
+        return $this->tours;
+    }
+
+    /**
+     * @param int $tours
+     */
+    public function setTours($tours)
+    {
+        $this->tours = $tours;
+    }
+
+
 }

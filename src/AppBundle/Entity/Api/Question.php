@@ -59,7 +59,7 @@ class Question
     /**
      * @var Categorie
      *
-     * @ORM\ManyToOne(targetEntity="Categorie")
+     * @ORM\OneToMany(targetEntity="Categorie",mappedBy="id")
      */
     private $categorie;
 
@@ -192,7 +192,7 @@ class Question
     /**
      * Set categorie
      *
-     * @param string $categorie
+     * @param Categorie $categorie
      * @return Question
      */
     public function setCategorie($categorie)
@@ -205,7 +205,7 @@ class Question
     /**
      * Get categorie
      *
-     * @return string 
+     * @return Categorie
      */
     public function getCategorie()
     {

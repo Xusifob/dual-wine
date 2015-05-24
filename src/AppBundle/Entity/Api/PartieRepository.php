@@ -14,11 +14,11 @@ use Doctrine\ORM\AbstractQuery;
  */
 class PartieRepository extends EntityRepository
 {
-    public function findCatchThemAll($id = null)
+    public function QueryParties($id = null)
     {
         $qb = $this->createQueryBuilder('p');
         $qb->select('p,u')
-            ->leftJoin('p.user','u', Expr\Join::WITH)
+            ->leftJoin('p.joueur', 'u', Expr\Join::WITH)
             ->orderBy('p.id', 'DESC')
         ;
         if($id != null){
@@ -31,5 +31,49 @@ class PartieRepository extends EntityRepository
         return null === $id
             ? $qb->getQuery()->getArrayResult()
             : $qb->getQuery()->getSingleResult(AbstractQuery::HYDRATE_ARRAY);
+    }
+
+
+    public function AllPartiesUser($token,$sort = false)
+    {
+        $parties = $this->QueryParties();
+        /** @var Partie $partie */
+        $start = [];
+        $inProgress = [];
+        $done = [];
+
+        $prties = [];
+
+        foreach($parties as $partie){
+            /** @var User $joueur */
+            foreach($partie['joueur'] as $joueur){
+                if($joueur['token'] == $token) {
+                    if ($sort) {
+                        switch ($partie['etat']) {
+                            case Partie::ETAT_DEBUT :
+                                array_push($start, $partie);
+                                break;
+                            case Partie::ETAT_ENCOURS :
+                                array_push($inProgress, $partie);
+                                break;
+                            case Partie::ETAT_FIN :
+                                array_push($done, $partie);
+                        }
+                    }else{
+                        array_push($prties,$partie);
+                    }
+                }
+            }
+        }
+        if ($sort) {
+            return [
+                'play' => true,
+                'start' => $start,
+                'inProgress' => $inProgress,
+                'done' => $done
+            ];
+        }else{
+            return $prties;
+        }
     }
 }
