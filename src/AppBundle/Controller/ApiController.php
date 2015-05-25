@@ -509,30 +509,29 @@ class ApiController extends Controller
         $qsts = [
             [
                 'nom' => 'Quel pays est le plus gros exportateur de vin aujourd\'hui ?',
-                'vrai' => 'France',
-                'faux1' => "Italie",
+                'Vrai' => 'France',
+                'Faux1' => "Italie",
                 'Faux2' => 'Espagne',
                 'Faux3' => 'Chine',
             ],
-
             [
                 'nom' => 'Quel pays est le plus gros consommateur de vin aujourd\'hui ?',
-                'vrai' => 'Vatican',
-                'faux1' => "France",
+                'Vrai' => 'Vatican',
+                'Faux1' => "France",
                 'Faux2' => 'Etats Unis',
                 'Faux3' => 'Chine',
             ],
             [
                 'nom' => 'Quelle est la région qui produit le plus de vin en France?',
-                'vrai' => 'Aquitaine',
-                'faux1' => "Champagne",
+                'Vrai' => 'Aquitaine',
+                'Faux1' => "Champagne",
                 'Faux2' => 'Côte du Rhône',
                 'Faux3' => 'Bourgogne',
             ],
             [
                 'nom' => 'De quelle région vient le St Emilion ? ',
-                'vrai' => 'Bordeaux ',
-                'faux1' => "Champagne",
+                'Vrai' => 'Bordeaux ',
+                'Faux1' => "Champagne",
                 'Faux2' => 'Côte du Rhône',
                 'Faux3' => 'Bourgogne',
             ],
@@ -542,10 +541,12 @@ class ApiController extends Controller
             $question = new Question();
             $question->setNom($qst['nom'])
                 ->setCategorie($cat)
-                ->setFaux1($qst['faux1'])
+                ->setFaux1($qst['Faux1'])
                 ->setFaux2($qst['Faux2'])
                 ->setFaux3($qst['Faux3'])
-                ->setVrai($qst['vrai']);
+                ->setVrai($qst['Vrai'])
+                ->setActive(true)
+                ;
             $em->persist($question);
             $em->flush();
         }

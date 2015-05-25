@@ -685,7 +685,7 @@ class UserRepository extends EntityRepository
                     /*--------------------------------*/
                     /** @var QuestionRepository $qstRepo */
                     $qstRepo = $em->getRepository('AppBundle:Api\Question');
-                    $qst = $qstRepo->findAll();
+                    $qst = $qstRepo->findBy(['active' => true]);
 
                     // Je mélange les qst
                     shuffle($qst);

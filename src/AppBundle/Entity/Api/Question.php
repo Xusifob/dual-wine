@@ -65,6 +65,14 @@ class Question
 
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="active", type="boolean")
+     */
+    private $active;
+
+
+    /**
      * Get id
      *
      * @return integer 
@@ -211,4 +219,25 @@ class Question
     {
         return $this->categorie;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param boolean $active
+     * @return $this
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+
 }
