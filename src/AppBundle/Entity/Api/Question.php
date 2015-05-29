@@ -59,7 +59,7 @@ class Question
     /**
      * @var Categorie
      *
-     * @ORM\ManyToMany(targetEntity="Categorie",mappedBy="id")
+     * @ORM\ManyToMany(targetEntity="Categorie")
      */
     private $categorie;
 
