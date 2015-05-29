@@ -34,4 +34,23 @@ class QuestionRepository extends EntityRepository
             : $qb->getQuery()->getSingleResult(AbstractQuery::HYDRATE_ARRAY);
     }
 
+   /* public function QuestionNonValider()
+    {
+        $qb = $this->createQueryBuilder('q');
+        $qb->select('q.id,q.nom')
+            ->where('q.active = false')
+        ;
+        $questions= $qb->getQuery()->getSingleResult(AbstractQuery::HYDRATE_ARRAY);
+        if ($questions != null){
+            return[
+                'questions' => $questions
+            ];
+        }else{
+            return[
+                'questions' => null
+            ];
+        }
+
+    }*/
+
 }
