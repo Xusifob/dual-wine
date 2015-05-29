@@ -88,26 +88,29 @@ class UserRepository extends EntityRepository
             /**@var $user User **/
             $user = $this->findOneBy(['pseudo' => $pseudo]);
 
+            if($user != null) {
+                // Gestion du token
+                $token = $user->createToken();
+                // Je modifie le token
+                $user->setToken($token);
 
-            // Gestion du token
-            $token = $user->createToken();
-            // Je modifie le token
-            $user->setToken($token);
+                // Je l'ajoute dans la base de données
+                $em->persist($user);
 
-            // Je l'ajoute dans la base de données
-            $em->persist($user);
+                $em->flush();
 
-            $em->flush();
-
-            // Si le mot de passe est le bon
-            if($user->verifyPassword($password)){
-                return [
-                    'token' => $token,
-                    'pseudo' => $user->getPseudo(),
-                    'connect' => true,
-                    'id' => $user->getId(),
-                    'email' => $user->getEmail(),
-                ];
+                // Si le mot de passe est le bon
+                if ($user->verifyPassword($password)) {
+                    return [
+                        'token' => $token,
+                        'pseudo' => $user->getPseudo(),
+                        'connect' => true,
+                        'id' => $user->getId(),
+                        'email' => $user->getEmail(),
+                    ];
+                } else {
+                    return ['connect' => false];
+                }
             }else{
                 return ['connect' => false];
             }
