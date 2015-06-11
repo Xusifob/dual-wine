@@ -20,10 +20,11 @@ class QuestionType extends AbstractType
             ->add('faux1')
             ->add('faux2')
             ->add('faux3')
+            ->add('categorie')
             ->add('active')
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

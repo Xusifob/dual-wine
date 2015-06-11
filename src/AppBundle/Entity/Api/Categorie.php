@@ -32,7 +32,7 @@ class Categorie
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -55,10 +55,14 @@ class Categorie
     /**
      * Get nom
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {
         return $this->nom;
+    }
+
+    public function __toString(){
+        return $this->getNom();
     }
 }
