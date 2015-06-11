@@ -1,15 +1,15 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>Api\Question creation</h1>
+    <div class="container">
+        <div class="card">
+            <h1>Nouvelle question</h1>
 
-    {{ form(form) }}
+            {{ form(form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_question') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+            <a href="{{ path('admin_question') }}" class="btn btn-primary">
+                Back to the list
+            </a>
+        </div>
+    </div>
 {% endblock %}
