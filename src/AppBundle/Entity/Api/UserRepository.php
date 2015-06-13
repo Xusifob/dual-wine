@@ -553,6 +553,7 @@ class UserRepository extends EntityRepository
                 $partie = $repoPartie->find($id_partie);
 
 
+
                 // Je regarde si l'utilisateur est le premier ou pas
                 if($partie->getFirstPlayer() == $user->getId()) {
                     $userTour = $partie->getTourj1();
@@ -560,9 +561,10 @@ class UserRepository extends EntityRepository
 
                         // Je récupère 4 catégories
                         // Je récupère la partie
+
                         /** @var CategorieRepository $repo */
-                        $repoCategorie = $em->getRepository('AppBundle:Api\Categorie');
-                        $cat = $repoCategorie->findAll();
+                        $repo = $em->getRepository('AppBundle:Api\Categorie');
+                        $cat = $repo->QueryCategories();
 
                         // Je récupère 4 catégories aléatoires
                         shuffle($cat);
@@ -683,17 +685,6 @@ class UserRepository extends EntityRepository
                 // Création du tour
                 if ($id_categorie != null) {
 
-                    /*--------------------------------*/
-                    // Questions
-                    /*--------------------------------*/
-                    /** @var QuestionRepository $qstRepo */
-                    $qstRepo = $em->getRepository('AppBundle:Api\Question');
-                    $qst = $qstRepo->findBy(['active' => true]);
-
-                    // Je mélange les qst
-                    shuffle($qst);
-                    // J'en resort 3
-                    $qst = array_chunk($qst, 3, true)[0];
 
                     /*--------------------------------*/
                     // Catégories
@@ -704,6 +695,18 @@ class UserRepository extends EntityRepository
 
                     $cat = $catRepo->find($id_categorie);
 
+
+                    /*--------------------------------*/
+                    // Questions
+                    /*--------------------------------*/
+                    /** @var QuestionRepository $qstRepo */
+                    $qstRepo = $em->getRepository('AppBundle:Api\Question');
+                    $qst = $qstRepo->findQuestionInCategory($cat);
+
+                    // Je mélange les qst
+                    shuffle($qst);
+                    // J'en resort 3
+                    $qst = array_chunk($qst, 3, true)[0];
 
 
                     // Création du nouveau tour
@@ -716,6 +719,7 @@ class UserRepository extends EntityRepository
 
                     $em->persist($tour);
                     $em->flush();
+
 
                     // J'ajoute le tour à la partie
 

@@ -34,23 +34,45 @@ class QuestionRepository extends EntityRepository
             : $qb->getQuery()->getSingleResult(AbstractQuery::HYDRATE_ARRAY);
     }
 
-   /* public function QuestionNonValider()
+    /**
+     * @param $idcat
+     * @return array
+     */
+    public function findQuestionInCategory($idcat)
     {
         $qb = $this->createQueryBuilder('q');
-        $qb->select('q.id,q.nom')
-            ->where('q.active = false')
+        $qb->select('q,c')
+            ->leftJoin('q.categorie','c', Expr\Join::WITH)
+            ->orderBy('q.id', 'DESC')
+            ->where('c.id = :id')
+            ->andWhere('q.active = :active')
+            ->setParameters([
+                ':id' => $idcat,
+                ':active' => true
+            ])
         ;
-        $questions= $qb->getQuery()->getSingleResult(AbstractQuery::HYDRATE_ARRAY);
-        if ($questions != null){
-            return[
-                'questions' => $questions
-            ];
-        }else{
-            return[
-                'questions' => null
-            ];
-        }
 
-    }*/
+        return $qb->getQuery()->getResult();
+
+    }
+
+    /* public function QuestionNonValider()
+     {
+         $qb = $this->createQueryBuilder('q');
+         $qb->select('q.id,q.nom')
+             ->where('q.active = false')
+         ;
+         $questions= $qb->getQuery()->getSingleResult(AbstractQuery::HYDRATE_ARRAY);
+         if ($questions != null){
+             return[
+                 'questions' => $questions
+             ];
+         }else{
+             return[
+                 'questions' => null
+             ];
+         }
+
+     }*/
 
 }
