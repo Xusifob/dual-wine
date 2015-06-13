@@ -2,48 +2,14 @@
 
 namespace AppBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\Entity\Api\UserRepository;
 use AppBundle\Entity\Api\User;
 class DefaultController extends Controller
 {
-    /**
-     * @Route("/", name="homepage")
-     */
-    public function indexAction()
-    {
-        return $this->render('default/index.html.twig');
-    }
-
-    /**
-     * @Route("/", name="homepage")
-     */
-    public function registerAction()
-    {
-        /************ RECUPERATION DES DONNEES ******************/
-        // Je récupère la valeur de la requette
-        $request = $this->get('request');
-        // Je récupère les données envoyés en ajax (ici username password et e-mail)
-        $username = $request->get('username');
-        $password = $request->get('password');
-        $email = $request->get('email');
-        /************** TRAITEMENT DES DONNEES ****************/
-        // J
-        $em = $this->getDoctrine()->getManager();
-        /** @var UserRepository $repo */
-        $repo = $em->getRepository('AppBundle:Api\User');
-        $inscription = $repo->RegisterUser($email,$username,$password);
-
-        /************ RETOUR DES DONNEES *********************/
-        // Je crée ma valeur de retour
-        $jsonResponse = new JsonResponse($inscription);
-        // Je set les headers pour pouvoir utiliser les données en ajax
-        $jsonResponse->headers->set("Access-Control-Allow-Origin", "*");
-        $jsonResponse->headers->set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-        $jsonResponse->headers->set('Access-Control-Allow-Headers', 'origin, content-type, accept');
-        // Je renvoie la réponse
-        return $jsonResponse;
-    }
 
     /**
      * @Route("/", name="homepage")
@@ -54,9 +20,9 @@ class DefaultController extends Controller
 
         // J'ai raccourci cette partie, car c'est plus rapide à écrire !
         $form = $this->createFormBuilder($User)
-            ->add('username',       'text')
-            ->add('mail',       'text')
-            ->add('password',       'text')
+            ->add('pseudo',       'text')
+            ->add('email',       'text')
+            ->add('password',       'password')
             ->getForm();
 
         // On récupère la requête
@@ -71,13 +37,19 @@ class DefaultController extends Controller
             // On vérifie que les valeurs entrées sont correctes
             // (Nous verrons la validation des objets en détail dans le prochain chapitre)
             if ($form->isValid()) {
+
+                $token = $User->createToken();
+                $User->setToken($token)
+                    ->cryptPassword();
                 // On l'enregistre notre objet $User dans la base de données
+
+                /** @var EntityManager $em */
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($User);
                 $em->flush();
 
                 // On redirige vers la page de visualisation de l'User nouvellement créé
-                return $this->redirect($this->generateUrl('user_voir', array('id' => $User->getId())));
+                return $this->redirect($this->generateUrl('homepage', array('id' => $User->getId())));
             }
         }
 

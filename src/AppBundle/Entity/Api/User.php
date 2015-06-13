@@ -271,6 +271,12 @@ class User
         return password_verify($password,$this->password);
     }
 
+    public function cryptPassword()
+    {
+        $this->password = crypt($this->password);
+        return $this;
+    }
+
     /**
      * @param $newPassword
      * @return bool
