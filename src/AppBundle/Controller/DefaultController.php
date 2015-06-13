@@ -40,7 +40,8 @@ class DefaultController extends Controller
 
                 $token = $User->createToken();
                 $User->setToken($token)
-                    ->cryptPassword();
+                    ->cryptPassword()
+                    ->setScore(1000);
                 // On l'enregistre notre objet $User dans la base de données
 
                 /** @var EntityManager $em */
