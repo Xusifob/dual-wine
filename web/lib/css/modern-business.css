@@ -184,6 +184,6 @@ body .checkbox input[type=checkbox] {
     overflow: visible;
     left: auto;
 }
-.card{
-    padding: 40px;
+body .card{
+    padding: 40px !important;
 }
