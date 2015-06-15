@@ -174,3 +174,16 @@ footer {
 .center{
 	margin: 0 auto;
 }
+
+body .checkbox input[type=checkbox] {
+    opacity: 1;
+    position: initial;
+    z-index: 1;
+    width: auto;
+    height: 20px;
+    overflow: visible;
+    left: auto;
+}
+.card{
+    padding: 40px;
+}
