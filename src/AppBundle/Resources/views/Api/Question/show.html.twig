@@ -1,9 +1,11 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>Api\Question</h1>
+<div class="container">
+    <div class="card">
+    <h1>Votre questionb</h1>
 
-    <table class="record_properties">
+    <table class="record_properties table">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -38,15 +40,17 @@
 
         <ul class="record_actions">
     <li>
-        <a href="{{ path('admin_question') }}">
+        <a href="{{ path('admin_question') }} " class="btn btn-default">
             Back to the list
         </a>
     </li>
     <li>
-        <a href="{{ path('admin_question_edit', { 'id': entity.id }) }}">
+        <a href="{{ path('admin_question_edit', { 'id': entity.id }) }}" class="btn btn-primary">
             Edit
         </a>
     </li>
     <li>{{ form(delete_form) }}</li>
 </ul>
+        </div>
+    </div>
 {% endblock %}
